@@ -23,12 +23,7 @@ const Footer = () => {
     <footer className='flexStart footer'>
       <div className='flex flex-col gap-12 w-full'>
         <div className='flex items-start flex-col'>
-          <Image
-            src="/logo-purple.png"
-            width={116}
-            height={47}
-            alt="Skribble"
-          />
+          <span className='logo pt-3' style={{color: '#885ecc'}}>skribble</span>
           <p className='text-start text-sm font-normal mt-5 max-w-xs'>
             Scribble is a community for creative nerds to share, grow, and get hired.
           </p>

@@ -1,34 +1,31 @@
 import Link from 'next/link'
-import React from 'react'
 import Image from 'next/image'
-import { NavLinks } from '@/constants'
-import { AuthProviders } from './AuthProviders'
 
+import { NavLinks } from '@/constants'
+
+import AuthProviders from './AuthProviders'
 
 const NavBar = () => {
+ 
   const session = {}
-
   return (
     <nav className='flexBetween navbar'>
+      {/* Add "items-center" class to center the .logo */}
       <div className='flex-1 flexStart gap-10'>
-        <Link href="/">
-          <Image
-            src="/logo.png"
-            width={116}
-            height={47}
-            alt="Skribble"
-          />
+        <Link className="logo" href="/">
+         skribble
         </Link>
         <ul className='xl:flex hidden text-small gap-7'>
-          {NavLinks.map((link, index) => (
-            <Link href={link.href} key={link.key}>
+          {NavLinks.map((link) => (
+            <Link href={link.href} key={link.text}>
               {link.text}
             </Link>
           ))}
         </ul>
       </div>
+
       <div className='flexCenter gap-4'>
-        {session ? (
+        {!session ? (
           <>
             UserPhoto
             <Link href="/create-project">Share Work</Link>
