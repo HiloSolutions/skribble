@@ -5,15 +5,18 @@ import { NavLinks } from '@/constants'
 import AuthProviders from './AuthProviders'
 import { getCurrentUser } from '@/lib/session'
 
+
 const NavBar = async () => {
+ 
+
   const session = await getCurrentUser();
 
   return (
     <nav className='flexBetween navbar'>
-      {/* Add "items-center" class to center the .logo */}
+
       <div className='flex-1 flexStart gap-10'>
         <Link className="logo" href="/">
-         skribble
+          skribble
         </Link>
         <ul className='xl:flex hidden text-small gap-7'>
           {NavLinks.map((link) => (
@@ -25,7 +28,7 @@ const NavBar = async () => {
       </div>
 
       <div className='flexCenter gap-4'>
-        {!session ? (
+        {session?.user ? (
           <>
             UserPhoto
             <Link href="/create-project">Share Work</Link>
@@ -35,7 +38,8 @@ const NavBar = async () => {
         )}
       </div>
     </nav>
-  )
-}
+  );
+};
+
 
 export default NavBar
