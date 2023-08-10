@@ -1,13 +1,13 @@
 import Link from 'next/link'
-import Image from 'next/image'
 
 import { NavLinks } from '@/constants'
 
 import AuthProviders from './AuthProviders'
+import { getCurrentUser } from '@/lib/session'
 
-const NavBar = () => {
- 
-  const session = {}
+const NavBar = async () => {
+  const session = await getCurrentUser();
+
   return (
     <nav className='flexBetween navbar'>
       {/* Add "items-center" class to center the .logo */}
