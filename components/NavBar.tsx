@@ -1,14 +1,13 @@
-import Link from 'next/link'
+import Link from 'next/link';
+import Image from "next/image";
 
-import { NavLinks } from '@/constants'
+import { NavLinks } from '@/constants';
 
-import AuthProviders from './AuthProviders'
-import { getCurrentUser } from '@/lib/session'
+import AuthProviders from './AuthProviders';
+import { getCurrentUser } from '@/lib/session';
 
 
 const NavBar = async () => {
- 
-
   const session = await getCurrentUser();
 
   return (
@@ -20,7 +19,7 @@ const NavBar = async () => {
         </Link>
         <ul className='xl:flex hidden text-small gap-7'>
           {NavLinks.map((link) => (
-            <Link href={link.href} key={link.text}>
+            <Link href={link.href} key={link.key}>
               {link.text}
             </Link>
           ))}
@@ -30,7 +29,14 @@ const NavBar = async () => {
       <div className='flexCenter gap-4'>
         {session?.user ? (
           <>
-            UserPhoto
+            {session?.user?.image && (
+              <Image
+                src={session.user.image}
+                width={40}
+                height={40}
+                alt={session.user.name}
+              />
+            )}
             <Link href="/create-project">Share Work</Link>
           </>
         ) : (

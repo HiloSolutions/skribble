@@ -5,8 +5,8 @@ import GoogleProvider from "next-auth/providers/google";
 import jsonwebtoken from 'jsonwebtoken'
 import { JWT } from "next-auth/jwt";
 
-import { SessionInterface } from "@/common.types";
-
+import { SessionInterface, UserProfile } from "@/common.types";
+import { createUser, getUser } from "./actions";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,17 +29,41 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session }) {
+      const email = session?.user?.email as string;
+      try {
+        const data = await getUser(email) as { user?: UserProfile}
+
+        const newSession = {
+          ...session,
+          user: {
+            ...session.user,
+            ...data?.user
+          }
+        }
+
+        return newSession;
+      }
+      catch {
+
+      }
       return session;
     },
     async signIn({ user }: { user: AdapterUser | User }) {
       try {
         //get user if they exist
-
+        const userExists = await getUser(user?.email as string) as { user?: UserProfile }
         //if they don't exist, create them
-
+        if (!userExists.user) {
+          await createUser(
+            user.name as string,
+            user.email as string,
+            user.image as string
+          );
+        }
         // return true if they exist or were created
         return true;
-      } catch (error: any) {
+      }
+      catch (error: any) {
         console.log(error);
         return false;
       }
@@ -47,9 +71,11 @@ export const authOptions: NextAuthOptions = {
   }
 }
 
-
+//name, email, avatarurl from google
+// all other info made in session stored in graph ql
 export async function getCurrentUser() {
   const session = await getServerSession(authOptions) as SessionInterface;
-
   return session;
 }
+
+

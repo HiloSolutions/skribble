@@ -1,6 +1,6 @@
 import NavBar from '@/components/NavBar';
-import './globals.css';
 import Footer from '@/components/Footer';
+import './globals.css';
 
 export const metadata = {
   title: 'Skribble',
@@ -16,7 +16,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <NavBar />
-        
         <main>
           {children}
         </main>
