@@ -7,6 +7,7 @@ import { JWT } from "next-auth/jwt";
 
 import { SessionInterface, UserProfile } from "@/common.types";
 import { createUser, getUser } from "./actions";
+import { userAgent } from "next/server";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -15,14 +16,14 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  // jwt: {
-  //   encode: ({ secret, token }) => {
+  jwt: {
+    encode: ({ secret, token }) => {
 
-  //   },
-  //   decode: async ({ secret, token }) => {
+    },
+    decode: async ({ secret, token }) => {
 
-  //   }
-  // },
+    }
+  },
   theme: {
     colorScheme: 'light',
     logo: '/logo.png'
@@ -31,7 +32,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session }) {
       const email = session?.user?.email as string;
       try {
-        const data = await getUser(email) as { user?: UserProfile}
+        const data = await getUser(email) as { user?: UserProfile }
 
         const newSession = {
           ...session,
@@ -43,8 +44,9 @@ export const authOptions: NextAuthOptions = {
 
         return newSession;
       }
-      catch {
-
+      catch (error) {
+        console.log("Oops! we couldn't find any user data", error);
+        return session;
       }
       return session;
     },
