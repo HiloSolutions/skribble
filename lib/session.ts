@@ -2,12 +2,13 @@ import { getServerSession } from "next-auth/next";
 import { NextAuthOptions, User } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
-import jsonwebtoken from 'jsonwebtoken'
+import jsonwebtoken from 'jsonwebtoken';
 import { JWT } from "next-auth/jwt";
 
 import { SessionInterface, UserProfile } from "@/common.types";
 import { createUser, getUser } from "./actions";
 import { userAgent } from "next/server";
+
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -18,17 +19,20 @@ export const authOptions: NextAuthOptions = {
   ],
   jwt: {
     encode: ({ secret, token }) => {
-      const encodedToken = jsonwebtoken.sign({
-        ...token,
-        iss: 'grafbase',
-        exp: Math.floor(Date.now() / 1000) + 60 * 60
-      }, secret)
+      const encodedToken = jsonwebtoken.sign(
+        {
+          ...token,
+          iss: 'grafbase',
+          exp: Math.floor(Date.now() / 1000) + 60 * 60,
+        },
+        secret
+      );
 
       return encodedToken;
     },
     decode: async ({ secret, token }) => {
-      const decodedToken = jsonwebtoken.verify(token!, secret) as JWT;
-      return decodedToken;
+      const decodedToken = jsonwebtoken.verify(token!, secret);
+      return decodedToken as JWT;
     }
   },
   theme: {
@@ -55,9 +59,10 @@ export const authOptions: NextAuthOptions = {
         console.log("Oops! we couldn't find any user data", error);
         return session;
       }
-      return session;
     },
-    async signIn({ user }: { user: AdapterUser | User }) {
+    async signIn({ user }: { 
+      user: AdapterUser | User 
+    }) {
       try {
         //get user if they exist
         const userExists = await getUser(user?.email as string) as { user?: UserProfile }
@@ -67,13 +72,13 @@ export const authOptions: NextAuthOptions = {
             user.name as string,
             user.email as string,
             user.image as string
-          );
+          )
         }
         // return true if they exist or were created
         return true;
       }
       catch (error: any) {
-        console.log(error);
+        console.log('Could not find the user at signIn', error);
         return false;
       }
     }
