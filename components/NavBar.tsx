@@ -32,12 +32,10 @@ const NavBar = async () => {
         {session?.user ? (
           <>
             <ProfileMenu session={session} />
+
             <Link href="/create-project">
               Share Work
             </Link>
-            <button type="button" className="text-sm" onClick={signOut}>
-              Sign Out
-            </button>
           </>
         ) : (
           <AuthProviders />
