@@ -69,7 +69,7 @@ const ProjectForm = ({ type, session }: Props) => {
       className="flexStart form"
     >
       <div className="flexStart form_image-container">
-        <label htmlForm="poster" className="flexCenter form_image-label">
+        <label htmlFor="poster" className="flexCenter form_image-label">
           {!form.image && 'Choose a cover for your project'}
         </label>
         <input
